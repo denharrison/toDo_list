@@ -230,35 +230,41 @@ body {
     gap: 10px;
 }
 
-.task-action-btn {
-    background: none;
-    border: none;
-    font-size: 1.2rem;
-    cursor: pointer;
-    color: #777;
-    transition: all 0.2s;
+/* Стили для изображений вместо кнопок с иконками */
+.task-action-img {
     width: 40px;
     height: 40px;
+    padding: 8px;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: transparent;
+    object-fit: contain;
 }
 
-.edit-btn:hover {
-    color: #ff9800;
+.task-action-img:hover {
+    transform: scale(1.1);
+}
+
+.task-action-img.edit-btn:hover {
     background-color: rgba(255, 152, 0, 0.1);
 }
 
-.delete-btn:hover {
-    color: #f44336;
+.task-action-img.delete-btn:hover {
     background-color: rgba(244, 67, 54, 0.1);
+}
+
+/* Убираем стандартные обводки у изображений при фокусе */
+.task-action-img:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(142, 84, 233, 0.3);
 }
 
 .empty-state {
     text-align: center;
     padding: 60px 20px;
     color: #888;
+    display: none;
 }
 
 .empty-state i {
@@ -271,6 +277,11 @@ body {
     font-size: 1.8rem;
     margin-bottom: 10px;
     color: #aaa;
+}
+
+/* Показываем empty-state, когда список задач пуст */
+#tasksList:empty + #emptyState {
+    display: block;
 }
 
 .actions {
@@ -343,4 +354,45 @@ body {
     .actions {
         flex-direction: column;
     }
+    
+    .task-item {
+        padding: 15px;
+    }
+    
+    .task-action-img {
+        width: 36px;
+        height: 36px;
+        padding: 6px;
+    }
+}
+
+/* Анимации для добавления/удаления задач */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+.task-item {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.task-item.removing {
+    animation: fadeOut 0.3s ease-out;
 }

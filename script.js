@@ -1,41 +1,110 @@
-// Добавление задачи 
-
 let tasksList = document.querySelector("#tasksList");
-let taskInput = document.querySelector('#taskInput');
-let valueInput = ''
+let taskInput = document.querySelector("#taskInput");
+let totalTasks = document.querySelector("#totalTasks");
+let pendingTasks = document.querySelector("#pendingTasks");
+let completedTasks = document.querySelector("#completedTasks");
+let valueInput = "";
 
-taskInput.addEventListener('input', (event) => { valueInput = event.target.value })
+// Счетчики 
+let countTotalTasks = 1;
+let pendingTasksCount = 1;
+let completedTasksCount = 0;
 
-let addTaskBtn = document.querySelector('#addTaskBtn');
+// Обновляем счетчики 
+totalTasks.textContent = countTotalTasks;
+pendingTasks.textContent = pendingTasksCount;
+completedTasks.textContent = completedTasksCount;
 
-addTaskBtn.addEventListener('click', (event) => {
+taskInput.addEventListener("input", (event) => {
+  valueInput = event.target.value;
+});
 
-    let newTask = document.createElement('li')
-    let newTaskInput = document.createElement('input')
-    let newTaskSpan = document.createElement('span')
-    let taskActions = document.createElement('div')
-    let editBtn = document.createElement('button')
+let addTaskBtn = document.querySelector("#addTaskBtn");
 
-    newTask.classList.add("task-item");
+// Добавление задач 
 
-    newTaskInput.classList.add("task-checkbox");
-    newTaskInput.setAttribute('type', 'checkbox')
+addTaskBtn.addEventListener("click", (event) => {
 
-    newTaskSpan.classList.add('task-text')
-    newTaskSpan.textContent = valueInput
+  if (valueInput.trim() === "") { // проверяем на пустоту => trim учитывает пробелы
+    return;
+  }
 
-    taskActions.classList.add("task-actions");
+  let newTask = document.createElement("li");
+  let newTaskInput = document.createElement("input");
+  let newTaskSpan = document.createElement("span");
+  let taskActions = document.createElement("div");
+  let editTaskIcon = document.createElement("img");
+  let deleteTaskIcon = document.createElement("img");
 
-    editBtn.classList.add("task-action-btn");
-    editBtn.classList.add("delete-btn");
-    editBtn.setAttribute('title', 'Редактировать')
+  newTask.classList.add("task-item");
+  newTaskInput.classList.add("task-checkbox");
+  newTaskInput.setAttribute("type", "checkbox");
 
-    newTask.append(newTaskInput)
-    newTask.append(newTaskSpan);
-    newTask.append(taskActions)
-    tasksList.append(newTask)
+  // Обработчик чекбокса
+  newTaskInput.addEventListener("change", function () {
+    if (this.checked) {
+      // Галочку поставили: задача выполнена
+      completedTasks.textContent = ++completedTasksCount;
+      pendingTasks.textContent = --pendingTasksCount;
+    } else {
+      // Галочку убрали: задача снова невыполнена
+      completedTasks.textContent = --completedTasksCount;
+      pendingTasks.textContent = ++pendingTasksCount;
+    }
+  });
 
-    valueInput = ''
-    taskInput.value = ''
+  newTaskSpan.classList.add("task-text");
+  newTaskSpan.textContent = valueInput;
 
-})
+  taskActions.classList.add("task-actions");
+  editTaskIcon.classList.add("task-action-img");
+  editTaskIcon.classList.add("edit-btn");
+  editTaskIcon.setAttribute(
+    "src",
+    "https://cdn-icons-png.flaticon.com/512/3597/3597075.png"
+  );
+
+  deleteTaskIcon.classList.add("task-action-img");
+  deleteTaskIcon.classList.add("delete-btn");
+  deleteTaskIcon.setAttribute(
+    "src",
+    "https://cdn-icons-png.flaticon.com/512/3405/3405244.png"
+  );
+
+  //  Обработчик удаления задачи
+  deleteTaskIcon.addEventListener("click", function () {
+
+    if (newTaskInput.checked) { // если нажата галочка
+      completedTasks.textContent = --completedTasksCount;
+    } else { // если не нажата галочка
+      pendingTasks.textContent = --pendingTasksCount;
+    }
+
+    totalTasks.textContent = --countTotalTasks;
+
+    // Удаляем задачу из DOM
+    newTask.remove();
+  });
+
+  // Добавление элементов в DOM
+  newTask.append(newTaskInput);
+  newTask.append(newTaskSpan);
+  newTask.append(taskActions);
+  taskActions.append(editTaskIcon);
+  taskActions.append(deleteTaskIcon);
+  tasksList.append(newTask);
+
+  // Сбрасываем поле ввода
+  valueInput = "";
+  taskInput.value = "";
+
+// Обновляем счетчики
+  totalTasks.textContent = ++countTotalTasks; // +1 к общему количеству
+  pendingTasks.textContent = ++pendingTasksCount; // +1 к невыполненным 
+
+});
+
+let tasksArray = document.getElementsByClassName('task-item') // живая коллекция задач
+
+let btnActive = document.querySelector('[data-filter="pending"]'); // кнопка активные 
+let btnComplete = document.querySelector('[data-filter="completed"]'); // кнопка завершенные 
