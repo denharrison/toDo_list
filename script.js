@@ -104,7 +104,72 @@ addTaskBtn.addEventListener("click", (event) => {
 
 });
 
+// Работа с кнопками
+
 let tasksArray = document.getElementsByClassName('task-item') // живая коллекция задач
 
+let btnAll = document.querySelector('[data-filter="all"]'); // кнопка все задачи
 let btnActive = document.querySelector('[data-filter="pending"]'); // кнопка активные 
 let btnComplete = document.querySelector('[data-filter="completed"]'); // кнопка завершенные 
+
+btnActive.addEventListener('click', (event) => {
+
+  btnActive.classList.add('active') // добавляем класс перекрашивающий кнопку
+  btnAll.classList.remove('active') // убираем классы перекраски 
+  btnComplete.classList.remove('active') // убираем классы перекраски 
+
+  for (const task of tasksArray) {
+
+    let taskInput = task.querySelector("input"); // находим галочку у задачи
+
+      if (taskInput.checked) {
+        // если нажата галочка - скрываем задачу 
+        task.style.display = 'none'
+      } else {
+        // если не нажата галочка - показываем задачу 
+        task.style.display = "flex";
+      }
+    }
+
+
+})
+
+btnAll.addEventListener("click", (event) => {
+
+  btnAll.classList.add("active"); // добавляем класс перекрашивающий кнопку
+  btnActive.classList.remove("active"); // убираем классы перекраски
+  btnComplete.classList.remove("active"); // убираем классы перекраски
+
+  for (const task of tasksArray) {
+    
+    task.style.display = 'flex'
+
+  }
+
+
+});
+
+
+btnComplete.addEventListener("click", (event) => {
+
+  btnComplete.classList.add("active"); // добавляем класс перекрашивающий кнопку
+  btnActive.classList.remove("active"); // убираем классы перекраски
+  btnAll.classList.remove("active"); // убираем классы перекраски
+
+
+  for (const task of tasksArray) {
+
+    let taskInput = task.querySelector("input"); // находим галочку у задачи
+
+    if (taskInput.checked) {
+      // если нажата галочка - скрываем задачу
+      task.style.display = "flex";
+    } else {
+      // если не нажата галочка - показываем задачу
+      task.style.display = "none";
+    }
+  }
+
+
+});
+
