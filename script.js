@@ -6,8 +6,8 @@ let completedTasks = document.querySelector("#completedTasks");
 let valueInput = "";
 
 // Счетчики 
-let countTotalTasks = 1;
-let pendingTasksCount = 1;
+let countTotalTasks = 0;
+let pendingTasksCount = 0;
 let completedTasksCount = 0;
 
 // Обновляем счетчики 
@@ -173,3 +173,44 @@ btnComplete.addEventListener("click", (event) => {
 
 });
 
+// Работа с нижними кнопками
+
+let clearCompleteBtn = document.querySelector("#clearCompletedBtn"); // кнопка удалить завершенные 
+let markAllBtn = document.querySelector("#markAllBtn"); // кнопка отметить все как выполненные 
+
+ markAllBtn.addEventListener('click', (event) => {
+
+  for (const task of tasksArray) {
+
+    let taskInput = task.querySelector("input"); // находим галочку у задачи
+
+       if (!taskInput.checked) {
+         // если галочка не нажата - нажимаем
+         completedTasks.textContent = ++completedTasksCount;
+         pendingTasks.textContent = --pendingTasksCount
+         taskInput.checked = true;
+       } 
+
+
+  }
+
+ })
+
+  clearCompleteBtn.addEventListener('click', (event) => {
+
+    for (const task of tasksArray) {
+
+      let taskInput = task.querySelector("input"); // находим галочку у задачи
+
+         if (taskInput.checked) {
+           // если нажата галочка - удаляем задачу и обновляем счетчики 
+          completedTasks.textContent = --completedTasksCount;
+          pendingTasksCount <= 0 ? pendingTasks.textContent = 0 : pendingTasks.textContent = --pendingTasksCount
+          totalTasks.textContent = --countTotalTasks
+          task.remove()
+           
+         } 
+    }
+  })
+
+  
